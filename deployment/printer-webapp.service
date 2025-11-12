@@ -5,11 +5,11 @@ Wants=cups.service
 
 [Service]
 Type=simple
-User=pi
-Group=pi
-WorkingDirectory=/home/bsurya/Projects/piserver
-Environment="PATH=/home/bsurya/Projects/piserver/venv/bin"
-ExecStart=/home/bsurya/Projects/piserver/venv/bin/python app.py
+User=aoi
+Group=aoi
+WorkingDirectory=/home/aoi/Projects/piserver
+Environment="PATH=/home/aoi/Projects/piserver/venv/bin"
+ExecStart=/home/aoi/Projects/piserver/venv/bin/python app.py
 
 # Restart policy
 Restart=always
