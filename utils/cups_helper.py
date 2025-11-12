@@ -20,7 +20,7 @@ def submit_print_job(filepath: str, copies: int = 1, duplex: bool = False) -> Tu
     """
     try:
         # Build lp command
-        cmd = ['lp']
+        cmd = ['/usr/bin/lp']
 
         # Add number of copies
         if copies > 1:
@@ -77,7 +77,7 @@ def get_print_queue() -> List[Dict[str, str]]:
     try:
         # Use lpstat -o to get current jobs
         result = subprocess.run(
-            ['lpstat', '-o'],
+            ['/usr/bin/lpstat', '-o'],
             capture_output=True,
             text=True,
             timeout=5
@@ -131,7 +131,7 @@ def get_job_status(job_id: str) -> Optional[str]:
 
         # Check completed jobs (last 24 hours)
         result = subprocess.run(
-            ['lpstat', '-W', 'completed', '-o'],
+            ['/usr/bin/lpstat', '-W', 'completed', '-o'],
             capture_output=True,
             text=True,
             timeout=5
@@ -162,7 +162,7 @@ def cancel_print_job(job_id: str) -> Tuple[bool, str]:
     """
     try:
         result = subprocess.run(
-            ['cancel', job_id],
+            ['/usr/bin/cancel', job_id],
             capture_output=True,
             text=True,
             timeout=5
@@ -190,7 +190,7 @@ def check_cups_available() -> bool:
     """
     try:
         result = subprocess.run(
-            ['lpstat', '-r'],
+            ['/usr/bin/lpstat', '-r'],
             capture_output=True,
             text=True,
             timeout=5
