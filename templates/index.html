@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acres of ice - Network Printer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>Acres of ice</h1>
+            <p class="subtitle">Network Printer @ printerpi.local</p>
+            <div id="printer-status" class="status-indicator">
+                <span class="status-dot" id="status-dot"></span>
+                <span id="status-text">Checking status...</span>
+            </div>
+        </header>
+
+        <!-- Upload Section -->
+        <section class="card upload-section">
+            <h2>Print Files</h2>
+
+            <form id="upload-form" enctype="multipart/form-data">
+                <!-- File Upload Area -->
+                <div class="upload-area" id="upload-area">
+                    <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <p class="upload-text">Drag and drop files here, or click to select</p>
+                    <p class="upload-hint">PDF, TXT, JPG, PNG (Max 20 MB each)</p>
+                    <input type="file" id="file-input" name="files" multiple accept=".pdf,.txt,.jpg,.jpeg,.png" hidden>
+                </div>
+
+                <!-- Selected Files List -->
+                <div id="selected-files" class="selected-files"></div>
+
+                <!-- Print Options -->
+                <div class="print-options">
+                    <div class="option-group">
+                        <label for="copies">Copies:</label>
+                        <input type="number" id="copies" name="copies" min="1" max="10" value="1">
+                    </div>
+
+                    <div class="option-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="duplex" name="duplex">
+                            <span>Duplex (Double-sided)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submit-btn" class="btn btn-primary" disabled>
+                    <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                    </svg>
+                    Print
+                </button>
+            </form>
+        </section>
+
+        <!-- Current Queue Section -->
+        <section class="card queue-section">
+            <div class="section-header">
+                <h2>Print Queue</h2>
+                <button class="btn btn-small" id="refresh-queue-btn">
+                    <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                    </svg>
+                    Refresh
+                </button>
+            </div>
+
+            <div id="queue-container">
+                <p class="loading">Loading queue...</p>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section class="card history-section">
+            <div class="section-header">
+                <h2>Print History (Last 7 Days)</h2>
+                <button class="btn btn-small" id="toggle-history-btn">
+                    <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                    </svg>
+                    Show
+                </button>
+            </div>
+
+            <div id="history-container" class="collapsed">
+                <p class="loading">Loading history...</p>
+            </div>
+        </section>
+
+        <!-- Toast Notifications -->
+        <div id="toast-container"></div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

@@ -96,7 +96,7 @@ This feature introduces a web-based PDF printing service for the Raspberry Pi se
 ## 6. Design Considerations
 
 ### 6.1 User Interface Layout
-- **Header**: Display "PrinterPi - Network Printer" with current printer status indicator
+- **Header**: Display "Acres of ice- Network Printer" with current printer status indicator
 - **Upload Section**: Drag-and-drop zone with file selector button, print options (copies, duplex), and submit button
 - **Current Queue Section**: Live-updating table of pending/active jobs with cancel buttons
 - **History Section**: Collapsible table of recent print jobs (last 7 days) with reprint buttons

@@ -1,0 +1,28 @@
+[Unit]
+Description=Acres of ice - Network Printer Web Application
+After=network.target cups.service
+Wants=cups.service
+
+[Service]
+Type=simple
+User=pi
+Group=pi
+WorkingDirectory=/home/bsurya/Projects/piserver
+Environment="PATH=/home/bsurya/Projects/piserver/venv/bin"
+ExecStart=/home/bsurya/Projects/piserver/venv/bin/python app.py
+
+# Restart policy
+Restart=always
+RestartSec=10
+
+# Security settings
+NoNewPrivileges=true
+PrivateTmp=true
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=printer-webapp
+
+[Install]
+WantedBy=multi-user.target
