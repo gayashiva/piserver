@@ -1,8 +1,11 @@
 import sqlite3
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Optional
 from contextlib import contextmanager
+
+# IST timezone (UTC+5:30)
+IST = timezone(timedelta(hours=5, minutes=30))
 
 
 DATABASE_FILE = 'print_history.db'
@@ -79,11 +82,12 @@ def add_print_job(
         Database record ID
     """
     with get_db_connection() as conn:
+        current_time = datetime.now(IST).strftime('%Y-%m-%d %H:%M:%S')
         cursor = conn.execute('''
             INSERT INTO print_jobs
-            (job_id, filename, original_filename, filepath, file_size_mb, copies, duplex, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'pending')
-        ''', (job_id, filename, original_filename, filepath, file_size_mb, copies, duplex))
+            (job_id, filename, original_filename, filepath, file_size_mb, copies, duplex, status, submitted_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'pending', ?)
+        ''', (job_id, filename, original_filename, filepath, file_size_mb, copies, duplex, current_time))
         return cursor.lastrowid
 
 
@@ -98,11 +102,12 @@ def update_job_status(job_id: str, status: str, error_message: Optional[str] = N
     """
     with get_db_connection() as conn:
         if status == 'completed':
+            current_time = datetime.now(IST).strftime('%Y-%m-%d %H:%M:%S')
             conn.execute('''
                 UPDATE print_jobs
-                SET status = ?, completed_at = CURRENT_TIMESTAMP
+                SET status = ?, completed_at = ?
                 WHERE job_id = ?
-            ''', (status, job_id))
+            ''', (status, current_time, job_id))
         else:
             conn.execute('''
                 UPDATE print_jobs
@@ -122,7 +127,7 @@ def get_recent_jobs(days: int = 7) -> List[Dict]:
         List of job dictionaries
     """
     with get_db_connection() as conn:
-        cutoff_date = datetime.now() - timedelta(days=days)
+        cutoff_date = (datetime.now(IST) - timedelta(days=days)).strftime('%Y-%m-%d %H:%M:%S')
         cursor = conn.execute('''
             SELECT * FROM print_jobs
             WHERE submitted_at > ?
@@ -163,7 +168,7 @@ def delete_old_records(days: int = 7) -> int:
         Number of records deleted
     """
     with get_db_connection() as conn:
-        cutoff_date = datetime.now() - timedelta(days=days)
+        cutoff_date = (datetime.now(IST) - timedelta(days=days)).strftime('%Y-%m-%d %H:%M:%S')
         cursor = conn.execute('''
             DELETE FROM print_jobs
             WHERE submitted_at < ?
